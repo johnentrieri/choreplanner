@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+#
+# Written by John Entrieri
+#
+# Generates Server Code Using OpenAPI Specification
+# -g python-flash           | Specifies to use Python Flask SERVER generator
+# -i openapi/openapi.yaml   | Points to OpenAPI Specification
+# -o server                 | Output Directory
+#
+
+openapitools/openapi-generator-cli generate -g python-flask -i openapi/openapi.yaml -o server

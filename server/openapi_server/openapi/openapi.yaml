@@ -1,0 +1,816 @@
+openapi: 3.0.3
+info:
+  description: |-
+    Simple Chore Planner
+
+    [Github](http://github.com/johnentrieri)
+  title: Chore Planner
+  version: 0.0.1
+servers:
+- url: /
+tags:
+- description: Chore Planner Endpoints
+  name: Chore Planner
+- description: Chore Performer Endpoints
+  name: Performer
+- description: Task Rule Endpoints
+  name: Task Rule
+- description: Task Endpoints
+  name: Task
+paths:
+  /planner:
+    post:
+      description: Create new Planner
+      operationId: create_planner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Planner'
+        description: Update Planner Settings
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid Data
+        "401":
+          description: Authorization Error
+      summary: Create new Planner
+      tags:
+      - Chore Planner
+      x-openapi-router-controller: openapi_server.controllers.chore_planner_controller
+  /planner/{plannerID}:
+    delete:
+      description: Delete Existing Planner Settings by ID
+      operationId: delete_planner
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner not found
+      summary: Delete Planner by ID
+      tags:
+      - Chore Planner
+      x-openapi-router-controller: openapi_server.controllers.chore_planner_controller
+    get:
+      description: Request specific existing planner by ID
+      operationId: read_planner
+      parameters:
+      - description: ID of Planner to return
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner not found
+      summary: Get Planner by ID
+      tags:
+      - Chore Planner
+      x-openapi-router-controller: openapi_server.controllers.chore_planner_controller
+    put:
+      description: Change Existing Planner Settings by ID
+      operationId: update_planner
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Planner'
+        description: Update Planner Settings
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner not found
+      summary: Update Planner Settings by ID
+      tags:
+      - Chore Planner
+      x-openapi-router-controller: openapi_server.controllers.chore_planner_controller
+  /planner/{plannerID}/performer:
+    post:
+      description: Adds new Performer to Existing Planner by Planner ID
+      operationId: add_performer
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Performer'
+        description: Create Performer
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner not found
+      summary: Add Performer to a Planner
+      tags:
+      - Performer
+      x-openapi-router-controller: openapi_server.controllers.performer_controller
+  /planner/{plannerID}/performer/{performerID}:
+    delete:
+      description: Deletes Existing Performer from a Planner
+      operationId: delete_performer
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID of Performer to Delete
+        explode: false
+        in: path
+        name: performerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner or Performer not found
+      summary: Delete Performer from Planner
+      tags:
+      - Performer
+      x-openapi-router-controller: openapi_server.controllers.performer_controller
+    put:
+      description: Updates Existing Performer within a Planner
+      operationId: update_performer
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID of Performer to Update
+        explode: false
+        in: path
+        name: performerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updatePerformer_request'
+        description: Update Performer Data
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner or Performer not found
+      summary: Update Performer within a Planner
+      tags:
+      - Performer
+      x-openapi-router-controller: openapi_server.controllers.performer_controller
+  /planner/{plannerID}/task:
+    post:
+      description: Adds new Task to Existing Planner by Planner ID
+      operationId: add_task
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInstance'
+        description: Create TaskRule
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner not found
+      summary: Add Task Rule to a Planner
+      tags:
+      - Task
+      x-openapi-router-controller: openapi_server.controllers.task_controller
+  /planner/{plannerID}/task/{taskID}:
+    delete:
+      description: Deletes Existing Task from a Planner
+      operationId: delete_task
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID of Task to Delete
+        explode: false
+        in: path
+        name: taskID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner or Task not found
+      summary: Delete Task from Planner
+      tags:
+      - Task
+      x-openapi-router-controller: openapi_server.controllers.task_controller
+    put:
+      description: Updates Existing Task within a Planner
+      operationId: update_task
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID of Task to Update
+        explode: false
+        in: path
+        name: taskID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateTask_request'
+        description: Update Task Data
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner or Task not found
+      summary: Update Task within a Planner
+      tags:
+      - Task
+      x-openapi-router-controller: openapi_server.controllers.task_controller
+  /planner/{plannerID}/taskRule:
+    post:
+      description: Adds new Task Rule to Existing Planner by Planner ID
+      operationId: add_task_rule
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRule'
+        description: Create Task Rule
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner not found
+      summary: Add Task Rule to a Planner
+      tags:
+      - Task Rule
+      x-openapi-router-controller: openapi_server.controllers.task_rule_controller
+  /planner/{plannerID}/taskRule/{taskRuleID}:
+    delete:
+      description: Deletes Existing Task Rule from a Planner
+      operationId: delete_task_rule
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID of Task Rule to Delete
+        explode: false
+        in: path
+        name: taskRuleID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner or Task Rule not found
+      summary: Delete Task Rule from Planner
+      tags:
+      - Task Rule
+      x-openapi-router-controller: openapi_server.controllers.task_rule_controller
+    put:
+      description: Updates Existing Taske Rule within a Planner
+      operationId: update_task_rule
+      parameters:
+      - description: ID of Planner to Update
+        explode: false
+        in: path
+        name: plannerID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID of Task Rule to Update
+        explode: false
+        in: path
+        name: taskRuleID
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateTaskRule_request'
+        description: Update Task Rule Data
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planner'
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "401":
+          description: Authorization Error
+        "404":
+          description: Planner or Task Rule not found
+      summary: Update Task Rule within a Planner
+      tags:
+      - Task Rule
+      x-openapi-router-controller: openapi_server.controllers.task_rule_controller
+  /planners:
+    get:
+      description: Request all Planners in Database
+      operationId: read_planners
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Planner'
+                type: array
+          description: Successful operation
+        "401":
+          description: Authorization Error
+        "404":
+          description: No Planners found
+      summary: View all planners
+      tags:
+      - Chore Planner
+      x-openapi-router-controller: openapi_server.controllers.chore_planner_controller
+components:
+  schemas:
+    Planner:
+      example:
+        plannerID: 10
+        performers:
+        - color: Red
+          name: John
+          performerID: 10
+          email: email
+        - color: Red
+          name: John
+          performerID: 10
+          email: email
+        taskRules:
+        - summary: Take Out the Garbage (Monday)
+          possibleAssignees:
+          - John
+          - John
+          firstAssignee: John
+          weekday: Any
+          taskRuleID: 10
+          firstWeek: 5
+          frequency: 2
+        - summary: Take Out the Garbage (Monday)
+          possibleAssignees:
+          - John
+          - John
+          firstAssignee: John
+          weekday: Any
+          taskRuleID: 10
+          firstWeek: 5
+          frequency: 2
+        numWeeks: 52
+        startDate: 2000-01-23
+        tasks:
+        - summary: Take Out the Garbage (Monday)
+          startWeek: 4
+          finishDate: 2000-01-23
+          assignee: John
+          taskID: 10
+          status: Open
+        - summary: Take Out the Garbage (Monday)
+          startWeek: 4
+          finishDate: 2000-01-23
+          assignee: John
+          taskID: 10
+          status: Open
+      properties:
+        plannerID:
+          description: Planner ID
+          example: 10
+          format: int64
+          readOnly: true
+          title: plannerID
+          type: integer
+        numWeeks:
+          description: Total Number of Weeks
+          example: 52
+          format: int64
+          maximum: 104
+          minimum: 1
+          title: numWeeks
+          type: integer
+        startDate:
+          description: Planner Starting Date
+          format: date
+          title: startDate
+          type: string
+        performers:
+          items:
+            $ref: '#/components/schemas/Performer'
+          readOnly: true
+          title: performers
+          type: array
+        taskRules:
+          items:
+            $ref: '#/components/schemas/TaskRule'
+          readOnly: true
+          title: taskRules
+          type: array
+        tasks:
+          items:
+            $ref: '#/components/schemas/TaskInstance'
+          readOnly: true
+          title: tasks
+          type: array
+      title: Planner
+      type: object
+    Performer:
+      example:
+        color: Red
+        name: John
+        performerID: 10
+        email: email
+      properties:
+        performerID:
+          description: Performer ID
+          example: 10
+          format: int64
+          readOnly: true
+          title: performerID
+          type: integer
+        name:
+          example: John
+          maxLength: 64
+          minLength: 3
+          title: PerformerName
+          type: string
+        email:
+          description: Performer Email Address
+          format: email
+          title: email
+          type: string
+        color:
+          description: Performer Color Code
+          enum:
+          - Red
+          - Green
+          - Blue
+          - Orange
+          - Pink
+          - Purple
+          - Yellow
+          title: color
+          type: string
+      title: Performer
+      type: object
+    TaskRule:
+      example:
+        summary: Take Out the Garbage (Monday)
+        possibleAssignees:
+        - John
+        - John
+        firstAssignee: John
+        weekday: Any
+        taskRuleID: 10
+        firstWeek: 5
+        frequency: 2
+      properties:
+        taskRuleID:
+          description: Task Rule ID
+          example: 10
+          format: int64
+          readOnly: true
+          title: taskRuleID
+          type: integer
+        summary:
+          example: Take Out the Garbage (Monday)
+          maxLength: 64
+          minLength: 3
+          title: TaskName
+          type: string
+        frequency:
+          description: "How Often Task Should Be Performed, in weeks. Zero (0) indicates\
+            \ a one time task with no repetition."
+          example: 2
+          format: int64
+          maximum: 52
+          minimum: 0
+          title: frequency
+          type: integer
+        firstWeek:
+          description: First Week That Task Should Be Performed
+          format: int64
+          maximum: 52
+          minimum: 1
+          title: firstWeek
+          type: integer
+        firstAssignee:
+          example: John
+          maxLength: 64
+          minLength: 3
+          title: PerformerName
+          type: string
+        possibleAssignees:
+          description: List of all Potential Assignees. Will Loop Through Assignee
+            List Each Week.
+          items:
+            $ref: '#/components/schemas/PerformerName'
+          minItems: 1
+          title: possibleAssignees
+          type: array
+        weekday:
+          description: Specific Day of the Week Task Must be Complete.
+          enum:
+          - Any
+          - Monday
+          - Tuesday
+          - Wednesday
+          - Thursday
+          - Friday
+          - Saturday
+          - Sunday
+          title: weekday
+          type: string
+      title: TaskRule
+      type: object
+    TaskInstance:
+      example:
+        summary: Take Out the Garbage (Monday)
+        startWeek: 4
+        finishDate: 2000-01-23
+        assignee: John
+        taskID: 10
+        status: Open
+      properties:
+        taskID:
+          description: Task ID
+          example: 10
+          format: int64
+          readOnly: true
+          title: taskID
+          type: integer
+        summary:
+          example: Take Out the Garbage (Monday)
+          maxLength: 64
+          minLength: 3
+          title: TaskName
+          type: string
+        startWeek:
+          description: Week that Task Instance Begins
+          example: 4
+          format: int64
+          minimum: 1
+          title: startWeek
+          type: integer
+        assignee:
+          example: John
+          maxLength: 64
+          minLength: 3
+          title: PerformerName
+          type: string
+        status:
+          description: Task Status
+          enum:
+          - Open
+          - Completed
+          - Skipped
+          title: status
+          type: string
+        finishDate:
+          description: Date Task was Completed or Skipped.
+          format: date
+          title: finishDate
+          type: string
+      title: TaskInstance
+      type: object
+    PerformerName:
+      example: John
+      maxLength: 64
+      minLength: 3
+      title: PerformerName
+      type: string
+    TaskName:
+      example: Take Out the Garbage (Monday)
+      maxLength: 64
+      minLength: 3
+      title: TaskName
+      type: string
+    updatePerformer_request:
+      properties:
+        newData:
+          $ref: '#/components/schemas/Performer'
+      title: updatePerformer_request
+      type: object
+    updateTaskRule_request:
+      properties:
+        newData:
+          $ref: '#/components/schemas/TaskRule'
+      title: updateTaskRule_request
+      type: object
+    updateTask_request:
+      properties:
+        newData:
+          $ref: '#/components/schemas/TaskInstance'
+      title: updateTask_request
+      type: object
+  securitySchemes:
+    choreplanner_auth:
+      scheme: basic
+      type: http
+      x-basicInfoFunc: openapi_server.controllers.security_controller.info_from_choreplanner_auth

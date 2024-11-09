@@ -1,0 +1,643 @@
+openapi: 3.0.3
+info:
+  title: Chore Planner
+  version: 0.0.1
+  description: |-
+    Simple Chore Planner
+
+    [Github](http://github.com/johnentrieri)
+
+tags:
+  - name: Chore Planner
+    description: Chore Planner Endpoints
+  - name: Performer
+    description: Chore Performer Endpoints
+  - name: Task Rule
+    description: Task Rule Endpoints
+  - name: Task
+    description: Task Endpoints
+paths:
+  /planners:
+    get:
+      tags:
+        - Chore Planner
+      summary: View all planners
+      description: Request all Planners in Database
+      operationId: readPlanners
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Planner'
+        '401':
+          description: Authorization Error
+        '404':
+          description: No Planners found
+  /planner:
+    post:
+      tags:
+        - Chore Planner
+      summary: Create new Planner
+      description: Create new Planner
+      operationId: createPlanner
+      requestBody:
+        description: Update Planner Settings
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Planner'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid Data
+        '401':
+          description: Authorization Error
+  /planner/{plannerID}:
+    get:
+      tags:
+        - Chore Planner
+      summary: Get Planner by ID
+      description: Request specific existing planner by ID
+      operationId: readPlanner
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner not found
+    put:
+      tags:
+        - Chore Planner
+      summary: Update Planner Settings by ID
+      description: Change Existing Planner Settings by ID
+      operationId: updatePlanner
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update Planner Settings
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Planner'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner not found
+    delete:
+      tags:
+        - Chore Planner
+      summary: Delete Planner by ID
+      description: Delete Existing Planner Settings by ID
+      operationId: deletePlanner
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner not found
+  /planner/{plannerID}/performer:
+    post:
+      tags:
+        - Performer
+      summary: Add Performer to a Planner
+      description: Adds new Performer to Existing Planner by Planner ID
+      operationId: addPerformer
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create Performer
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Performer'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner not found
+  /planner/{plannerID}/performer/{performerID}:
+    put:
+      tags:
+        - Performer
+      summary: Update Performer within a Planner
+      description: Updates Existing Performer within a Planner
+      operationId: updatePerformer
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: performerID
+          in: path
+          description: ID of Performer to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update Performer Data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newData:
+                  $ref: '#/components/schemas/Performer'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner or Performer not found
+    delete:
+      tags:
+        - Performer
+      summary: Delete Performer from Planner
+      description: Deletes Existing Performer from a Planner
+      operationId: deletePerformer
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: performerID
+          in: path
+          description: ID of Performer to Delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner or Performer not found
+  /planner/{plannerID}/taskRule:
+    post:
+      tags:
+        - Task Rule
+      summary: Add Task Rule to a Planner
+      description: Adds new Task Rule to Existing Planner by Planner ID
+      operationId: addTaskRule
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create Task Rule
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskRule'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner not found
+  /planner/{plannerID}/taskRule/{taskRuleID}:
+    put:
+      tags:
+        - Task Rule
+      summary: Update Task Rule within a Planner
+      description: Updates Existing Taske Rule within a Planner
+      operationId: updateTaskRule
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: taskRuleID
+          in: path
+          description: ID of Task Rule to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update Task Rule Data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newData:
+                  $ref: '#/components/schemas/TaskRule'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner or Task Rule not found
+    delete:
+      tags:
+        - Task Rule
+      summary: Delete Task Rule from Planner
+      description: Deletes Existing Task Rule from a Planner
+      operationId: deleteTaskRule
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: taskRuleID
+          in: path
+          description: ID of Task Rule to Delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner or Task Rule not found
+  /planner/{plannerID}/task:
+    post:
+      tags:
+        - Task
+      summary: Add Task Rule to a Planner
+      description: Adds new Task to Existing Planner by Planner ID
+      operationId: addTask
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create TaskRule
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskInstance'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner not found
+  /planner/{plannerID}/task/{taskID}:
+    put:
+      tags:
+        - Task
+      summary: Update Task within a Planner
+      description: Updates Existing Task within a Planner
+      operationId: updateTask
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: taskID
+          in: path
+          description: ID of Task to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update Task Data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newData:
+                  $ref: '#/components/schemas/TaskInstance'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner or Task not found
+    delete:
+      tags:
+        - Task
+      summary: Delete Task from Planner
+      description: Deletes Existing Task from a Planner
+      operationId: deleteTask
+      parameters:
+        - name: plannerID
+          in: path
+          description: ID of Planner to Update
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: taskID
+          in: path
+          description: ID of Task to Delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Planner'
+        '400':
+          description: Invalid ID supplied
+        '401':
+          description: Authorization Error
+        '404':
+          description: Planner or Task not found
+components:
+  schemas:
+    Planner:
+      type: object
+      properties:
+        plannerID:
+          description: Planner ID
+          type: integer
+          format: int64
+          example: 10
+          readOnly: true
+        numWeeks:
+          description: Total Number of Weeks
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 104
+          example: 52
+        startDate:
+          description: Planner Starting Date
+          type: string
+          format: date
+        performers:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/Performer'
+        taskRules:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskRule'
+        tasks:
+          readOnly: true
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskInstance'
+    Performer:
+      type: object
+      properties:
+        performerID:
+          description: Performer ID
+          type: integer
+          format: int64
+          example: 10
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/PerformerName'
+        email:
+          description: Performer Email Address
+          type: string
+          format: email
+        color:
+          description: Performer Color Code
+          type: string          
+          enum:
+            - Red
+            - Green
+            - Blue
+            - Orange
+            - Pink
+            - Purple
+            - Yellow        
+    TaskRule:
+      type: object
+      properties:
+        taskRuleID:
+          description: Task Rule ID
+          type: integer
+          format: int64
+          example: 10
+          readOnly: true
+        summary:
+          $ref: '#/components/schemas/TaskName'
+        frequency:
+            description: How Often Task Should Be Performed, in weeks. Zero (0) indicates a one time task with no repetition.
+            type: integer
+            format: int64
+            minimum: 0
+            maximum: 52
+            example: 2
+        firstWeek:
+            description: First Week That Task Should Be Performed
+            type: integer
+            format: int64
+            minimum: 1
+            maximum: 52
+        firstAssignee:
+          $ref: '#/components/schemas/PerformerName'
+        possibleAssignees:
+          description: List of all Potential Assignees. Will Loop Through Assignee List Each Week.
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PerformerName'
+        weekday:
+            description: Specific Day of the Week Task Must be Complete.
+            type: string
+            enum:
+              - Any
+              - Monday
+              - Tuesday
+              - Wednesday
+              - Thursday
+              - Friday
+              - Saturday
+              - Sunday
+    TaskInstance:
+      type: object
+      properties:
+        taskID:
+          description: Task ID
+          type: integer
+          format: int64
+          example: 10
+          readOnly: true
+        summary:
+          $ref: '#/components/schemas/TaskName'
+        startWeek:
+            description: Week that Task Instance Begins
+            type: integer
+            format: int64
+            minimum: 1
+            example: 4
+        assignee:
+          $ref: '#/components/schemas/PerformerName'
+        status:
+          description: Task Status
+          type: string
+          enum:
+            - Open
+            - Completed
+            - Skipped
+        finishDate:
+          description: Date Task was Completed or Skipped.
+          type: string
+          format: date
+    PerformerName:
+      type: string
+      minLength: 3
+      maxLength: 64
+      example: 'John'
+    TaskName:
+      type: string
+      minLength: 3
+      maxLength: 64
+      example: 'Take Out the Garbage (Monday)'
+
+  securitySchemes:
+    choreplanner_auth:
+      type: http
+      scheme: basic
