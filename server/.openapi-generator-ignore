@@ -23,6 +23,7 @@
 #!docs/README.md
 
 Dockerfile
+.gitignore
 .dockerignore
 git_push.sh
 README.md
